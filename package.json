@@ -1,0 +1,22 @@
+{
+  "name": "git.js",
+  "version": "0.0.0",
+  "description": "Git stuff in JS",
+  "main": "index.js",
+  "scripts": {
+    "test": "grunt test"
+  },
+  "keywords": [
+    "Javascript",
+    "Git"
+  ],
+  "author": "Chris Abrams",
+  "license": "MIT",
+  "devDependencies": {
+    "grunt": "~0.4.4",
+    "grunt-mocha-test": "~0.10.2",
+    "matchdep": "~0.3.0",
+    "coffee-script": "~1.7.1",
+    "chai": "~1.9.1"
+  }
+}
