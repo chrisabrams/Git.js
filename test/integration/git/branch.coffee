@@ -6,25 +6,34 @@ describe 'Branch', ->
 
   beforeEach (done) ->
 
+    options =
+      cwd: __testTempPath
+
     git = new Git
 
-    git.init().done ->
+    git.init(options).done ->
 
       done()
 
   afterEach (done) ->
 
+    options =
+      cwd: __testTempPath
+
     git = new Git
 
-    git.destroy().done ->
+    git.destroy(options).done ->
 
       done()
 
   it 'should have no local branches', (done) ->
 
+    options =
+      cwd: __testTempPath
+
     git = new Git
 
-    git.branch.list().done (res) ->
+    git.branch.list(options).done (res) ->
 
       expect(res).to.be.an 'array'
       expect(res.length).to.equal 0
@@ -33,20 +42,13 @@ describe 'Branch', ->
 
   it 'should create a branch', (done) ->
 
-    git = new Git
-
-    git.branch.create({name: 'foo'}).done (res) ->
-
-      expect(res).to.be.a 'boolean'
-      expect(res).to.be.true
-
-      done()
-
-  it 'should create a branch (shorthand)', (done) ->
+    options =
+      cwd: __testTempPath
+      name: 'foo'
 
     git = new Git
 
-    git.branch.create('foo').done (res) ->
+    git.branch.create(options).done (res) ->
 
       expect(res).to.be.a 'boolean'
       expect(res).to.be.true

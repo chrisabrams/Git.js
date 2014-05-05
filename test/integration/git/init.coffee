@@ -8,15 +8,18 @@ describe 'Init', ->
 
   it 'should init a git repository', (done) ->
 
+    options =
+      cwd: __testTempPath
+
     git = new Git
 
-    git.init().done (res) ->
+    git.init(options).done (res) ->
 
-      exists = fs.existsSync(path.join(process.cwd(), '.git'))
+      exists = fs.existsSync(path.join(__testTempPath, '.git'))
 
       expect(exists).to.be.true
 
-      proc = spawn('rm', ['-rf', '.git'])
+      proc = spawn('rm', ['-rf', '.git'], {cwd: __testTempPath})
 
       proc.on 'close', ->
 

@@ -26,13 +26,10 @@ module.exports = class Branch extends Base
       stderr: ->
         return true
 
-    if typeof options is 'object'
-      name = options.name
+    if options?.cwd
+      spawnOptions.cwd = options.cwd
 
-    else
-      name = options
-
-    spawnArgs = ['checkout', '-b', name]
+    spawnArgs = ['checkout', '-b', options.name]
 
     if options.remote and options.branch
 
@@ -60,11 +57,14 @@ module.exports = class Branch extends Base
 
   ###
 
-  list: (option) ->
+  list: (options) ->
 
     spawnOptions =
       defaultValue: []
       stdout: (data) ->
         return data.toString().replace('* ', '').replace(/\s{2,}/g, ' ').split(' ')
+
+    if options?.cwd
+      spawnOptions.cwd = options.cwd
 
     return @spawn(spawnOptions, 'git', ['branch'])

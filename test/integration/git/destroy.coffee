@@ -8,16 +8,20 @@ describe 'Destroy', ->
 
   it 'should destroy a git repository', (done) ->
 
-    git = new Git
+    # Init a repo to be destroyed
+    proc = spawn('git', ['init'], {cwd: __testTempPath})
 
-    git.destroy().done (res) ->
+    proc.on 'close', ->
 
-      proc = spawn('rm', ['-rf', '.git'])
+      options =
+        cwd: __testTempPath
 
-      proc.on 'close', ->
+      git = new Git
 
-        exists = fs.existsSync(path.join(process.cwd(), '.git'))
+      git.destroy(options).done (res) ->
 
-        expect(exists).to.be.false
+          exists = fs.existsSync(path.join(__testTempPath, '.git'))
 
-        done()
+          expect(exists).to.be.false
+
+          done()

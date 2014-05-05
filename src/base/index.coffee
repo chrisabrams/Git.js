@@ -10,14 +10,15 @@ module.exports = class Base
   Arguments:
 
   When options are passed:
-  options {Object} Optional options to help with how spawn resolves & returns data
-  options.code   {Function} Callback which returns error code before resolving
-  options.debug {Boolean} Whether to console.log (hopefully) useful information
-  options.defaultValue {Mixed} Provide a default value to be returned if stdout/stderr don't provide any data
-  options.resolveOnClose {Boolean} Resolve on process close, regardless if stdout returned data
-  options.resolveOnError {Boolean} Resolve on stderr, regardless if stdout returned data
-  options.stdout {Function} Callback which returns stdout data before resolving
-  options.stderr {Function} Callback which returns stderr data before resolving
+  options                {Object}   Optional options to help with how spawn resolves & returns data
+  options.code           {Function} Callback which returns error code before resolving
+  options.cwd            {String}   The working directly to apply the spawn command
+  options.debug          {Boolean}  Whether to console.log (hopefully) useful information
+  options.defaultValue   {Mixed}    Provide a default value to be returned if stdout/stderr don't provide any data
+  options.resolveOnClose {Boolean}  Resolve on process close, regardless if stdout returned data
+  options.resolveOnError {Boolean}  Resolve on stderr, regardless if stdout returned data
+  options.stdout         {Function} Callback which returns stdout data before resolving
+  options.stderr         {Function} Callback which returns stderr data before resolving
 
   Description:
   Runs commands.
@@ -26,6 +27,7 @@ module.exports = class Base
 
   spawn: () ->
 
+    # When this is true, we don't want close resolving/rejecting regardless of the situation
     processData = false
 
     d = Q.defer()
@@ -45,6 +47,10 @@ module.exports = class Base
 
       args = Array.prototype.slice.call(arguments)
       args.shift()
+
+      # If we're not running the process from process.cwd(), where are we running it?
+      if options?.cwd
+        args = args.concat [{cwd: options.cwd}]
 
       if options?.debug
         console.log "args", args
@@ -73,6 +79,8 @@ module.exports = class Base
 
     # Something went wrong
     proc.stderr.on 'data', (data) ->
+
+      processData = true
 
       if options?.debug
         console.log "stderr", data.toString()
@@ -125,6 +133,16 @@ module.exports = class Base
           d.resolve()
 
     return d.promise
+
+  ###
+  spawnRef {Function}
+
+  Description:
+  Returns a new spawn, so that the process can be handled manually.
+
+  return {Function}
+
+  ###
 
   spawnRef: () ->
 

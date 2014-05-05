@@ -12,6 +12,9 @@
   ],
   "author": "Chris Abrams",
   "license": "MIT",
+  "dependencies": {
+    "q": "~1.0.1"
+  },
   "devDependencies": {
     "grunt": "~0.4.4",
     "grunt-mocha-test": "~0.10.2",
